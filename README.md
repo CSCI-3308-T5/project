@@ -1,2 +1,2 @@
-# project
+# Project
 Repo for project code.
