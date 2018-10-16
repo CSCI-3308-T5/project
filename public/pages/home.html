@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<head>
+	<title>Game Connect</title>
+	<!--TODO add a favicon-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/stylesheet.css"></link>
+</head>
+<body style="background-color: gray;">
+	<nav class="navbar navbar-dark bg-dark text-grey">
+		<a class="navbar-brand" href="/">
+			<img width="36" height="36" src="/images/drawing.svg"></img>
+			Game Connect
+		</a>
+		<div id="accountButtons">
+			<a href="/login.html" class="plain-link pr-4">
+				<span style="font-size: 24px;"><i class="fas fa-user"></i></span>
+				Login
+			</a>
+			<a href="/newAccount.html" class="plain-link pr-1">
+				<span style="font-size: 24px;"><i class="fas fa-user-plus"></i></span>
+				Sign Up
+			</a>
+		</div>
+		<div id="loggedIn" style="display:None"> <!-- TODO add stuff here for when user is logged in-->
+			Logged In
+		</div>
+	</nav>
+	<main class="container-fluid text-white" style="padding-right: 150px; padding-left: 150px; padding-top: 50px;">
+		<div class="jumbotron-fluid">
+			<div class="row">
+				<div class="col-8">
+					<H1 class="display-3">Game Connect</H1>
+					<p class="lead">To Create A World Where Gamers Can Boldly Go Where Gamers Like Them Have Gone Before</p>
+					<hr class="my-3 whiteBar"></hr>
+					<p>
+						Welcome to Game Connect! With a whopping 0 users, our goal is to help you find new games to play and enjoy.
+						We have a nonexistent (but growing) database of games. Based on your preferences and the data we're going to
+						collect from other users, we will be able to recommend games that we think you'll love. Just make an account
+						or login to start getting recommendations and playing brand new games!
+					</p>
+				</div>
+				<div class="col-4">
+					<img width=500 height=500 src="/images/drawing2.svg"></img>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script src="/js/home.js"></script>
+</body>

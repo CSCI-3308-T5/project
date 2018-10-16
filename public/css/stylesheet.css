@@ -1,0 +1,48 @@
+/* visited link */
+.plain-link:link, .plain-link:visited, .plain-link:active {
+    color: lightgrey;
+}
+
+/* mouse over link */
+.plain-link:hover {
+	color: white;
+	text-decoration-line: none;
+}
+
+.loginForm {
+	background-color: white;
+	color: black;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+.error {
+	display: none;
+	color: red;
+}
+.error.active {
+	display:  block;
+}
+
+.alert {
+	display: none;
+}
+.alert.active {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    width: 500px;
+    margin-left: -250px;
+	display:  block;
+}
+
+.whiteBar {
+	background-color: white;
+	border-color: white;
+	color: white;
+}
+
+input:invalid {
+    box-shadow: 0px 0px 10px #FF0000;
+	background-color: #F0D0D0;
+}
