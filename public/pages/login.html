@@ -26,6 +26,7 @@
 			Logged In
 		</div>
 	</nav>
+	<div id="alert" class="alert" role="alert"></div>
 	<main class="container-fluid text-white" style="padding-right: 150px; padding-left: 150px; padding-top: 50px;">
 		<div class="row">
 			<div class="col-8">
@@ -37,14 +38,16 @@
 				<form id="loginForm" class="loginForm" novalidate>
 					<div class="form-group">
 						<label for="usernameField">Username/Email</label>
-						<input type="text" class="form-control" id="usernameField" placeholder="Username/Email"></input>
+						<input type="text" class="form-control" id="usernameField" name="usernameField" placeholder="Username/Email"></input>
+						<span class="error" id="usernameError"></span>
 					</div>
 					<div class="form-group">
 						<label for="passwordField">Password</label>
-						<input type="password" class="form-control" id="passwordField" placeholder="Password"></input>
+						<input type="password" class="form-control" id="passwordField" name="passwordField" placeholder="Password"></input>
+						<span class="error" id="passwordError"></span>
 					</div>
 					<div class="form-group form-check">
-						<input type="checkbox" class="form-check-input" id="rememberMeBox"></input>
+						<input type="checkbox" class="form-check-input" id="rememberMeBox" name="rememberMeBox"></input>
 						<label for="rememberMeBox">Remember Me</label>
 					</div>
 					<button type="submit" class="btn btn-primary">Submit</button>

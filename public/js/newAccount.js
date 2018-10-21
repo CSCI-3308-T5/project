@@ -95,7 +95,7 @@ function hideAlert(){
 
 usernameField.addEventListener("input", usernameCheck);
 emailField.addEventListener("input", emailCheck);
-passwordField.addEventListener("input", passwordCheck); //TODO add bcrypt to backend
+passwordField.addEventListener("input", passwordCheck);
 passwordConfirmField.addEventListener("input", passwordConfirmCheck);
 termsAndCondsBox.addEventListener("input", termsCheck);
 newAccountForm.addEventListener("submit", function(event){ //TODO change how data is sent to encrypt password and whatnot
