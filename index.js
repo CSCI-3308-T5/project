@@ -34,6 +34,9 @@ if(production){ //when deployed on heroku, forward all requests to https (we can
 	});
 }
 
+
+app.get("/static/*",express.static(path.join(__dirname,'public/static'))); //look in public/static for all static files
+
 //session middleware
 app.use(clientSession({
 	cookieName: 'session',
@@ -45,7 +48,6 @@ app.use(clientSession({
 }));
 //handle http get requests that match the pattern
 app.get("/", (req, res) => res.sendFile(path.join(__dirname,"public/pages/home.html")));
-app.get("/*",express.static(path.join(__dirname,'public'))); //look in public folder and return file matching name from request
 app.use((req,res,next) => { //cookie checker middleware, sets res.locals.loggedIn to appropriate value
 	if(req.session&&req.session.username&&req.session.hash&&Date.now()-req.session.timeStamp<=(24*60*60*1000)){ //cookies expire after 24 hours
 		bcrypt.compare(hmacSecret+req.session.username+req.session.timeStamp,req.session.hash, (err,match) => {
