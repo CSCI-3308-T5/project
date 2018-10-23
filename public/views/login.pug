@@ -1,0 +1,28 @@
+extends layout.pug
+
+append head
+	title Game Connect - Login
+
+block content
+	.row
+		.col-8
+			p.
+				Welcome to Game Connect! <br>
+				Let's get back to gaming!
+		.col-4
+			form.loginForm#loginForm(novalidate)
+				.form-group
+					label(for="usernameField") Username/Email
+					input.form-control#usernameField(type="text" name="usernameField" placeholder="Username/Email")
+					span.error#usernameError
+				.form-group
+					label(for="passwordField") Password
+					input.form-control#passwordField(type="password" name="passwordField" placeholder="Password")
+					span.error#passwordError
+				.form-group.form-check
+					input.form-check-input#rememberMeBox(type="checkbox" name="rememberMeBox")
+					label(for="rememberMeBox") Remember Me
+				button.btn.btn-primary(type="submit") Submit
+	
+block scripts
+	script(src="static/js/login.js")
