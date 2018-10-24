@@ -1,0 +1,39 @@
+extends layout.pug
+
+append head
+	title Game Connect - Create Account
+
+block content
+	.row
+		.col-8
+			h2 Create an Account
+			p.
+				 Welcome to Game Connect! <br>
+				 Sign up today and discover hundreds of new and interesting games!
+		.col-4
+			form.loginForm#newAccountForm(novalidate)
+				.form-group
+					label(for="usernameField") Username
+					input.form-control#usernameField(type="text" name="usernameField" placeholder="Username")
+					span.error#usernameError
+				.form-group
+					label(for="emailField") Email Address
+					input.form-control#emailField(type="email" name="emailField" placeholder="Email address")
+					small.form-text We will never share your email address with anyone else.
+					span.error#emailError
+				.form-group
+					label(for="passwordField") Password
+					input.form-control#passwordField(type="password" name="passwordField" placeholder="Password")
+					span.error#passwordError
+				.form-group
+					label(for="passwordConfirmField") Confirm Password
+					input.form-control#passwordConfirmField(type="password" placeholder="Confirm password")
+					span.error#passwordConfirmError
+				.form-group.form-check
+					input.form-check-input#termsAndCondsBox(type="checkbox")
+					label(for="termsAndCondsBox") I agree to the (nonexistent) Terms and Conditions
+					span.error#termsError
+				button.btn.btn-primary(type="submit") Submit
+	
+block scripts
+	script(src="static/js/newAccount.js")

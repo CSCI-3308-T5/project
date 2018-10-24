@@ -1,0 +1,41 @@
+doctype html
+html
+	head
+		block head
+			//- TODO add favicon
+		link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous")
+		link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous")
+		link(rel="stylesheet" href="static/css/stylesheet.css")
+		block styles
+	body(style="background-color: gray;")
+		nav#header.navbar.navbar-dark.bg-dark.text-grey
+			a.navbar-brand(href="/")
+				img(width="36" height="36" src="/static/images/drawing.svg")
+				|  Game Connect
+			#accountButtons
+				if !loggedIn
+					a.plain-link.pr-4(href="login")
+						span(style="font-size: 24px;"): i.fas.fa-user
+						|  Login
+					a.plain-link.pr-1(href="newAccount")
+						span(style="font-size: 24px;"): i.fas.fa-user-plus
+						|  Sign Up
+				else
+					.dropdown
+						a.btn.dropdown-toggle.text-lightgrey(data-toggle="dropdown")
+							i.fas.fa-user(style="font-size: 24px;")
+							|  #{username}
+						.dropdown-menu(style="left: auto; right: 0;")
+							a.dropdown-item(href="/dashboard")
+								i.fas.fa-tachometer-alt(style="font-size: 18px;")
+								|  Dashboard
+							a.dropdown-item(href="/logout")
+								i.fas.fa-sign-out-alt(style="font-size: 18px;")
+								|  Log out
+		.alert#alert(role="alert")
+		main.container-fluid.text-white(style="padding-right: 5%; padding-left: 5%; padding-top: 50px;")
+			block content
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous")
+		script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous")
+		block scripts

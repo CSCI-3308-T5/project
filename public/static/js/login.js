@@ -52,9 +52,8 @@ loginForm.addEventListener("submit", function(event){ //TODO change how data is 
 		url: "/login", //send request to url /login
 		data: $("#loginForm").serialize(), //convert data from form into json/xml (not sure which)
 		success: function(data){
-			if(data=="Success"){ //TODO redirect instead
-				alert.innerHTML = "Success<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
-				alert.className = "alert-success alert active"; //show alert
+			if(data=="Success"){
+				window.location.replace("dashboard");
 			}else{
 				alert.innerHTML = data+"<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
 				alert.className = "alert-danger alert active"; //show alert
