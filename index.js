@@ -4,6 +4,7 @@ const path = require("path")
 const pg = require("pg");
 const bcrypt = require("bcrypt");
 const clientSession = require("client-sessions");
+const childProcess = require("child_process")
 const app = express();
 
 let port = process.env.PORT;
@@ -16,8 +17,8 @@ var production = true;
 if (port == null || port == "") { //not deployed on heroku
 	production = false;
 	port = 3000;
-	dbURL = "postgres://project3308:project@localhost:5432/project"; //you need a user named project3308 with password project with permission to access/edit a database named project
-																	 //you may also need to add 'host all all localhost trust' to pg_hba.conf
+	pg.defaults.ssl = true;
+	dbURL = childProcess.execSync("heroku config:get DATABASE_URL").toString(); //get heroku database connection string
 }
 
 var dbPool = new pg.Pool({
@@ -123,6 +124,7 @@ app.post("/login", (req, res) => { //handles login requests TODO add logout and 
 	const plaintextPassword = req.body["passwordField"];
 	dbPool.connect((err,client,release)=>{ //connect to database
 		if(err){
+			console.error(err);
 			client.end(); //kill client
 			throw err;
 		}
