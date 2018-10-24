@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path")
-const pg = require("pg");
-const bcrypt = require("bcrypt");
+const Promise = require("bluebird")
+const pg = Promise.promisifyAll(require("pg"));
+const bcrypt = Promise.promisifyAll(require("bcrypt"));
 const clientSession = require("client-sessions");
 const childProcess = require("child_process")
 const app = express();
@@ -69,92 +70,53 @@ app.get("/*", (req, res) => res.sendStatus(404)); //if all else fails, return 40
 //handle http post requests that match the pattern
 app.post("/*",bodyParser.json()); //ignore this, it parses data into req.body
 app.post("/*",bodyParser.urlencoded({extended: true})); //ignore this, it parses data into req.body
-app.post("/accountCreate", (req, res) => { //handles account creation requests
+app.post("/accountCreate", async (req, res) => { //handles account creation requests
 	const username = req.body["usernameField"];
 	const email = req.body["emailField"];
 	const plaintextPassword = req.body["passwordField"];
 	//TODO check that username/email/password meet requirements on server side
-	dbPool.connect((err,client,release)=>{ //connect to database
-		if(err){
-			client.end(); //kill client
-			throw err;
+	try{
+		let result = await dbPool.query("select * from users where username=$1 or email=$2", [username, email]);
+		if(result.rows.length==0){
+			let hash = await bcrypt.hash(plaintextPassword, saltRounds);
+			await client.query("insert into users (username, email, hashedpass) values ($1,$2,$3)",[username, email, hash]);
+			res.send("Success");
+		}else{
+			if(result.rows[0].username==username)res.send("An account with that username already exists");
+			else res.send("An account with that email already exists");
 		}
-		client.query("select * from users where username=$1 or email=$2", [username, email], (err1, result) => { //query database
-			if(err1){
-				client.end(); //kill client
-				throw err1;
-			}
-			if(result.rows.length==0){ //no rows matching query
-				bcrypt.hash(plaintextPassword, saltRounds, function(err2, hash) { //salt and hash password
-					if(err2){
-						client.end(); //kill client
-						throw err2;
-					}
-			  		client.query("insert into users (username, email, hashedpass) values ($1,$2,$3) returning *",[username,email,hash], (err3, result2) => {
-						if(err3){
-							client.end(); //kill client
-							throw err3;
-						}
-						release(); //release client back to pool
-						res.send("Success"); //send string back to ajax request
-					});
-				});
-			}else{
-				release(); //release client back to pool
-				for(let i = 0;i<result.rows.length;i++){
-					if(result.rows[i]["username"]==username){
-						res.send("An account with that username already exists"); //send string back to ajax request
-						break;
-					}else if(result.rows[i]["email"]==email){
-						res.send("An account with that email already exists"); //send string back to ajax request
-						break;
-					}
-				}
-			}
-		});
-	});
+	}catch(err){
+		console.log(err);
+		res.sendStatus(400);
+	}
 });
-
-app.post("/login", (req, res) => { //handles login requests TODO add logout and dashboard
+app.post("/login", async (req,res) => { //TODO add logout
 	if(res.locals.loggedIn){
 		res.send("Already logged in");
 		return;
 	}
 	const username = req.body["usernameField"];
 	const plaintextPassword = req.body["passwordField"];
-	dbPool.connect((err,client,release)=>{ //connect to database
-		if(err){
-			console.error(err);
-			client.end(); //kill client
-			throw err;
-		}
-		client.query("select * from users where username=$1 or email=$1", [username], (err1, result) => { //query database
-			if(err1){
-				client.end(); //kill client
-				throw err1;
-			}
-			client.release();
-			if(result.rows.length!=0){
-				bcrypt.compare(plaintextPassword, result.rows[0]["hashedpass"], function(err2, match) { //compare password
-					if(err2)throw err2;
-					if(match){ //password is correct
-						req.session.username = result.rows[0]["username"];
-						req.session.timeStamp = Date.now();
-						if(req.body["rememberMeBox"])req.session.timeStamp = 8640000000000000; //max Date
-						bcrypt.hash(hmacSecret+req.session.username+req.session.timeStamp,saltRounds,(err3,hash)=>{
-							if(err3)throw err3;
-							req.session.hash = hash;
-							res.send("Success");
-						});
-					}else{ //password is incorrect
-						res.send("Incorrect password"); //send string back to ajax request
-					}
-				});
+	try{
+		let result = await dbPool.query("select * from users where username=$1 or email=$1", [username]);
+		if(result.rows.length==0) res.send("Incorrect username/email");
+		else{
+			let match = await bcrypt.compare(plaintextPassword,result.rows[0]["hashedpass"]);
+			if(match){
+				req.session.username = result.rows[0]["username"];
+				req.session.timeStamp = Date.now();
+				if(req.body["rememberMeBox"])req.session.timeStamp = 8640000000000000; //max Date
+				let hash = await bcrypt.hash(hmacSecret+req.session.username+req.session.timeStamp,saltRounds);
+				req.session.hash = hash;
+				res.send("Success");
 			}else{
-				res.send("Incorrect username/email"); //send string back to ajax request
+				res.send("Incorrect password");
 			}
-		});
-	});
+		}
+	}catch(err){
+		console.log(err);
+		res.sendStatus(err);
+	}
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`)); //sets the app to listen on the given port
