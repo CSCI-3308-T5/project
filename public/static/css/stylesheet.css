@@ -52,5 +52,5 @@ body {
 }
 
 .text-lightgrey {
-	color: lightgrey;
+	color: lightgrey!important;
 }
