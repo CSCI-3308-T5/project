@@ -2,7 +2,10 @@ extends layout.pug
 
 append head
 	title Game Connect - Dashboard
-	.block content
-		.row
-			.p 
-				Here's some games you'll enjoy!
+block content
+	.row
+		.p 
+			Here's some games you'll enjoy!
+
+block scripts
+	script(src="static/js/dashboard.js")
