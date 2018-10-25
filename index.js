@@ -65,7 +65,28 @@ app.use((req,res,next) => { //cookie checker middleware, sets res.locals.loggedI
 	}
 });
 app.get("/", (req, res) => res.render("home"));
-app.get("/*", (req, res) => res.render(req.path.substring(1))); //look in pages folder and return file matching name from request TODO add redirects
+app.get("/*", (req, res) => { //TODO update the redirects as more pages are added
+	let reqUrl = req.path.substring(1);
+	if(reqUrl=="logout"){
+		req.session.reset();
+		res.redirect("/login");
+		return;
+	}
+	const loginForbidden = new Set(["newAccount","login"]);
+	const loginRequired = new Set(["dashboard","profile"]);
+	if(res.locals.loggedIn){//user logged in
+		if(loginForbidden.has(reqUrl)){
+			res.redirect("/dashboard");
+			return;
+		}
+	}else{//user not logged in
+		if(loginRequired.has(reqUrl)){
+			res.redirect("/login");
+			return;
+		}
+	}
+	res.render(req.path.substring(1));
+}); //look in pages folder and return file matching name from request TODO add redirects
 app.get("/*", (req, res) => res.sendStatus(404)); //if all else fails, return 404
 //handle http post requests that match the pattern
 app.post("/*",bodyParser.json()); //ignore this, it parses data into req.body
