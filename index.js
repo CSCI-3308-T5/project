@@ -126,7 +126,10 @@ app.post("/login", async (req,res) => { //TODO add logout
 			if(match){
 				req.session.username = result.rows[0]["username"];
 				req.session.timeStamp = Date.now();
-				if(req.body["rememberMeBox"])req.session.timeStamp = 8640000000000000; //max Date
+				if(req.body["rememberMeBox"]){
+					req.session.setDuration(Number.MAX_SAFE_INTEGER); //prevent cookie from expiring on client side
+					req.session.timeStamp = 8640000000000000; //max Date
+				}
 				let hash = await bcrypt.hash(hmacSecret+req.session.username+req.session.timeStamp,saltRounds);
 				req.session.hash = hash;
 				res.send("Success");
