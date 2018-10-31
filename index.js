@@ -65,6 +65,7 @@ app.use((req,res,next) => { //cookie checker middleware, sets res.locals.loggedI
 	}
 });
 app.get("/", (req, res) => res.render("home"));
+app.get('/favicon.ico' , (req, res) => res.sendFile(path.join(__dirname,"public/static/images/favicon.ico")));
 app.get("/*", (req, res) => { //TODO update the redirects as more pages are added
 	let reqUrl = req.path.substring(1);
 	if(reqUrl=="logout"){

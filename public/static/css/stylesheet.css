@@ -28,7 +28,8 @@
 	display: none;
 }
 .alert.active {
-    position: absolute;
+    position: fixed;
+	z-index: 999;
     top: 25px;
     left: 50%;
     width: 500px;
