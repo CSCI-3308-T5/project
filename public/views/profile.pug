@@ -3,5 +3,12 @@ extends layout.pug
 append head
 	title Game Connect - Profile
 block content
-	.row.
-		#{username}
+	.row
+	h2.
+		#{username} 
+
+	.row(style="position:relative; margin-top: 7%")
+		h4 Games You've Reviewed:
+	.row
+		h6. 
+			<br><br> [Name of Game] &nbsp &nbsp &nbsp[Rating Given]/5
