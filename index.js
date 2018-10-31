@@ -19,7 +19,7 @@ if (port == null || port == "") { //not deployed on heroku
 	production = false;
 	port = 3000;
 	pg.defaults.ssl = true;
-	dbURL = childProcess.execSync("heroku config:get DATABASE_URL").toString(); //get heroku database connection string
+	dbURL = childProcess.execSync("heroku config:get DATABASE_URL -a gameconnect").toString(); //get heroku database connection string
 }
 
 var dbPool = new pg.Pool({
