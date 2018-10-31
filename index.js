@@ -100,7 +100,7 @@ app.post("/accountCreate", async (req, res) => { //handles account creation requ
 		let result = await dbPool.query("select * from users where username=$1 or email=$2", [username, email]);
 		if(result.rows.length==0){
 			let hash = await bcrypt.hash(plaintextPassword, saltRounds);
-			await client.query("insert into users (username, email, hashedpass) values ($1,$2,$3)",[username, email, hash]);
+			await dbPool.query("insert into users (username, email, hashedpass) values ($1,$2,$3)",[username, email, hash]);
 			res.send("Success");
 		}else{
 			if(result.rows[0].username==username)res.send("An account with that username already exists");
