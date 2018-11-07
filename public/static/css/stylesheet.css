@@ -76,7 +76,7 @@ body {
 
 
 .rate {
-    float: left;
+	float:left;
     height: 46px;
     padding: 0 10px;
 }
@@ -94,6 +94,7 @@ body {
     color:#ccc;
 }
 .rate:not(:checked) > label:before {
+	float: left;
     content: '★ ';
 }
 .rate > input:checked ~ label {

@@ -9,31 +9,20 @@ block content
 
 	.row(style="position:relative; margin-top: 7%")
 		h4 Games You've Reviewed:
-	.row
-		h5 <br><u>Name of Game You've Rated Number One</u>
-	<div class="rate" style="position:relative; left: 40%; top: -45px;">
-		<input type="radio" id="star5" name="GameNumberOneName" value="5" />
-		<label for="star5" title="text">5 stars</label>
-		<input type="radio" id="star4" name="GameNumberOneName" value="4" />
-		<label for="star4" title="text">4 stars</label>
-		<input type="radio" id="star3" name="GameNumberOneName" value="3" />
-		<label for="star3" title="text">3 stars</label>
-		<input type="radio" id="star2" name="GameNumberOneName" value="2" />
-		<label for="star2" title="text">2 stars</label>
-		<input type="radio" id="star1" name="GameNumberOneName" value="1" />
-		<label for="star1" title="text">1 star</label>
-	</div>	
-	.row
-	h5 <br><u>Game Number Two</u>
-	<div class="rate" name="Game2" style="position:relative; left: 40%; top: -45px;">
-		<input type="radio" id="star5" name="GameNumberTwoName" value="5" />
-		<label for="star5" title="text">5 stars</label>
-		<input type="radio" id="star4" name="GameNumberTwoName" value="4" />
-		<label for="star4" title="text">4 stars</label>
-		<input type="radio" id="star3" name="GameNumberTwoName" value="3" />
-		<label for="star3" title="text">3 stars</label>
-		<input type="radio" id="star2" name="GameNumberTwoName" value="2" />
-		<label for="star2" title="text">2 stars</label>
-		<input type="radio" id="star1" name="GameNumberTwoName" value="1" />
-		<label for="star1" title="text">1 star</label>
-	</div>	
+
+	each val in [1,2,3,4,5]
+		<br>
+		.row
+		h5 <u> Game #{val} </u>
+		<div class="rate" name="Game#{val}" style="position:relative; left: 40%; top: -45px;">
+			<input type="radio" id="star#{val}5" name="GameNumber#{val}" value="5" />
+			<label for="star#{val}5" title="text"></label>
+			<input type="radio" id="star#{val}4" name="GameNumber#{val}" value="4" />
+			<label for="star#{val}4" title="text"></label>
+			<input type="radio" id="star#{val}3" name="GameNumber#{val}" value="3" />
+			<label for="star#{val}3" title="text"></label>
+			<input type="radio" id="star#{val}2" name="GameNumber#{val}" value="2" />
+			<label for="star#{val}2" title="text"></label>
+			<input type="radio" id="star#{val}1" name="GameNumber#{val}" value="1" />
+			<label for="star#{val}1" title="text"></label>
+		</div>
