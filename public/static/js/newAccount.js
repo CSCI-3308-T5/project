@@ -42,6 +42,7 @@ function emailCheck(){
 }
 
 function passwordCheck(){
+	if(passwordConfirmField.value.length!=0) passwordConfirmCheck();
 	if(passwordField.value.length<6){
 		passwordField.setCustomValidity("invalid");
 		passwordError.innerHTML = "Password must be 6 or more characters";
@@ -109,8 +110,11 @@ newAccountForm.addEventListener("submit", function(event){ //TODO change how dat
 		data: $("#newAccountForm").serialize(), //convert data from form into json/xml (not sure which)
 		success: function(data){
 			if(data=="Success"){ //TODO redirect instead
-				alert.innerHTML = "Success<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
+				alert.innerHTML = "Success, redirecting to login...<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
 				alert.className = "alert-success alert active"; //show alert
+				setTimeout( () => {
+       				window.location.href = "/login";
+    			}, 2000);
 			}else{
 				alert.innerHTML = data+"<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
 				alert.className = "alert-danger alert active"; //show alert

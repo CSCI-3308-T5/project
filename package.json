@@ -19,6 +19,7 @@
     "child_process": "^1.0.2",
     "client-sessions": "^0.8.0",
     "express": "^4.16.4",
+    "nodemailer": "^4.6.8",
     "path": "^0.12.7",
     "pg": "^7.5.0",
     "pug": "^2.0.3"

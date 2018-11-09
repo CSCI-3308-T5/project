@@ -5,7 +5,7 @@ html
 			//- TODO add favicon
 		link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous")
 		link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous")
-		link(rel="stylesheet" href="static/css/stylesheet.css")
+		link(rel="stylesheet" href="/static/css/stylesheet.css")
 		block styles
 		script.
 			function submitSearch(){
@@ -27,10 +27,10 @@ html
 
 			#accountButtons
 				if !loggedIn
-					a.plain-link.pr-4(href="login")
+					a.plain-link.pr-4(href="/login")
 						span(style="font-size: 24px;"): i.fas.fa-user
 						|  Login
-					a.plain-link.pr-1(href="newAccount")
+					a.plain-link.pr-1(href="/newAccount")
 						span(style="font-size: 24px;"): i.fas.fa-user-plus
 						|  Sign Up
 				else
