@@ -9,6 +9,20 @@ block content
 
 	.row(style="position:relative; margin-top: 7%")
 		h4 Games You've Reviewed:
-	.row
-		h6. 
-			<br><br> [Name of Game] &nbsp &nbsp &nbsp[Rating Given]/5
+
+	each val in [1,2,3,4,5]
+		<br>
+		.row
+		h5 <u> Game #{val} </u>
+		<div class="rate" name="Game#{val}" style="position:relative; left: 40%; top: -45px;">
+			<input type="radio" id="star#{val}5" name="GameNumber#{val}" value="5" />
+			<label for="star#{val}5" title="text"></label>
+			<input type="radio" id="star#{val}4" name="GameNumber#{val}" value="4" />
+			<label for="star#{val}4" title="text"></label>
+			<input type="radio" id="star#{val}3" name="GameNumber#{val}" value="3" />
+			<label for="star#{val}3" title="text"></label>
+			<input type="radio" id="star#{val}2" name="GameNumber#{val}" value="2" />
+			<label for="star#{val}2" title="text"></label>
+			<input type="radio" id="star#{val}1" name="GameNumber#{val}" value="1" />
+			<label for="star#{val}1" title="text"></label>
+		</div>
