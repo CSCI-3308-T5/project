@@ -71,32 +71,20 @@ app.use(clientSession({
 	secureProxy: true, //cookie only sent over https connections
 }));
 //handle http get requests that match the pattern
-app.use((req,res,next) => { //cookie checker middleware, sets res.locals.loggedIn to appropriate value
-	if(req.session&&req.session.username&&req.session.hash&&Date.now()-req.session.timestamp<=(24*60*60*1000)){ //cookies expire after 24 hours
-		bcrypt.compare(hmacSecret1+req.session.username+req.session.timestamp,req.session.hash, (err,match) => {
-			if(err) throw err;
-			res.locals.loggedIn = match;
-			res.locals.username = req.session.username;
-			next();
-		});
-	}else{
-		res.locals.loggedIn = false;
-		next();
-	}
-});
+app.use(auth.authCheck);
 
 app.get("/", (req, res) => res.render("home"));
 app.get('/favicon.ico' , (req, res) => res.sendFile(path.join(__dirname,"../public/static/images/favicon.ico")));
-//app.use("/auth", auth.router)
-app.get("/*", (req, res, next) => { //TODO update the redirects as more pages are added
+//handle http post requests that match the pattern
+app.post("/*",bodyParser.json()); //ignore this, it parses data into req.body
+app.post("/*",bodyParser.urlencoded({extended: true})); //ignore this, it parses data into req.body
+app.use("/auth", auth.router);
+app.get("/*", (req, res) => { //TODO update the redirects as more pages are added
 	let reqUrl = req.path.substring(1).split('/'); //break uri into pieces
 	for(let i = 0;i<reqUrl.length;i++) reqUrl[i] = decodeURIComponent(reqUrl[i]); //unescape characters (i.e "%20" -> ' ')
 	if(reqUrl[0]=="logout"){
 		req.session.reset();
 		res.redirect("/auth/login");
-		return;
-	}else if(reqUrl[0]=="auth"){
-		next();
 		return;
 	}
 	const loginRequired = new Set(["dashboard","profile"]);
@@ -106,10 +94,6 @@ app.get("/*", (req, res, next) => { //TODO update the redirects as more pages ar
 	}
 	res.render(reqUrl[0]);
 }); //look in pages folder and return file matching name from request TODO add redirects
-//handle http post requests that match the pattern
-app.post("/*",bodyParser.json()); //ignore this, it parses data into req.body
-app.post("/*",bodyParser.urlencoded({extended: true})); //ignore this, it parses data into req.body
-app.use("/auth", auth.router)
 app.get("/*", (req, res) => res.sendStatus(404)); //if all else fails, return 404
 
 
