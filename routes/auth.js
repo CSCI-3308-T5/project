@@ -1,35 +1,18 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const path = require("path")
-const Promise = require("bluebird")
-const pg = Promise.promisifyAll(require("pg"));
+const path = require("path");
+const Promise = require("bluebird");
 const bcrypt = Promise.promisifyAll(require("bcrypt"));
-const clientSession = require("client-sessions");
-const childProcess = require("child_process");
 const nodemailer = Promise.promisifyAll(require("nodemailer"));
 const crypto = require("crypto");
-const app = express();
+const router = express.Router();
 
-let port = process.env.PORT;
-let dbURL = process.env.DATABASE_URL;
-let emailURL = process.env.EMAIL_URL;
-
-const saltRounds = 10;
-var hmacSecret1 = process.env.HMAC_SECRET1;
-var encryptionSecret = process.env.ENCRYPTION_SECRET;
-var client_session_secret = process.env.CLIENT_SESSION_SECRET;
-
-var production = true;
-if (port == null || port == "") { //not deployed on heroku
-	production = false;
-	port = 3000;
-	pg.defaults.ssl = true;
-	dbURL = childProcess.execSync("heroku config:get DATABASE_URL -a gameconnect").toString(); //get heroku database connection string
-	emailURL = childProcess.execSync("heroku config:get EMAIL_URL -a gameconnect").toString(); //get email connection string from heroku
-	hmacSecret1 = childProcess.execSync("heroku config:get HMAC_SECRET1 -a gameconnect").toString(); //get hmacSecret1 from heroku
-	client_session_secret = childProcess.execSync("heroku config:get CLIENT_SESSION_SECRET -a gameconnect").toString(); //get another secret thing from heroku
-	encryptionSecret = childProcess.execSync("heroku config:get ENCRYPTION_SECRET -a gameconnect").toString().substring(0,32); //get another secret thing from heroku
-}
+var main = require("./index.js");
+var saltRounds = main.saltRounds;
+var dbPool = main.dbPool;
+var emailTransporter = main.emailTransporter;
+var hmacSecret1 = main.hmacSecret1;
+var encryptionSecret = main.encryptionSecret;
+var client_session_secret = main.client_session_secret;
 
 function encrypt(str){
 	let iv = crypto.randomBytes(8).toString("hex");
@@ -44,38 +27,8 @@ function decrypt(str){
 	return (decipher.update(str,"binary")+decipher.final("binary")).toString();
 }
 
-var dbPool = new pg.Pool({
-	connectionString: dbURL,
-	max: 20,
-});
-
-var emailTransporter = nodemailer.createTransport(emailURL);
-
-if(production){ //when deployed on heroku, forward all requests to https (we can still write in http because heroku handles https for us)
-	app.use((req, res, next) => {
-		if (req.header('x-forwarded-proto') !== 'https')
-			res.redirect(`https://${req.header('host')}${req.url}`);
-		else
-			next();
-	});
-}
-
-app.set("views", path.join(__dirname,"public/views"))
-app.set("view engine", "pug")
-
-app.get("/static*", (req,res) => res.sendFile(path.join(__dirname,"public"+req.path))); //look in public/static for all static files
-
-//session middleware
-app.use(clientSession({
-	cookieName: 'session',
-	secret: client_session_secret, //encryption key
-	duration: 30 * 60 * 1000, //cookie works for 30 minutes
-	activeDuration: 10 * 60 * 1000, //if cookie expires in less than 10 minutes, add 10 minutes to cookie duration if user still on site
-	httpOnly: true, //cookie inaccessible from client-side js
-	secureProxy: true, //cookie only sent over https connections
-}));
 //handle http get requests that match the pattern
-app.use((req,res,next) => { //cookie checker middleware, sets res.locals.loggedIn to appropriate value
+function authCheck(req,res,next){ //cookie checker middleware, sets res.locals.loggedIn to appropriate value
 	if(req.session&&req.session.username&&req.session.hash&&Date.now()-req.session.timestamp<=(24*60*60*1000)){ //cookies expire after 24 hours
 		bcrypt.compare(hmacSecret1+req.session.username+req.session.timestamp,req.session.hash, (err,match) => {
 			if(err) throw err;
@@ -87,37 +40,18 @@ app.use((req,res,next) => { //cookie checker middleware, sets res.locals.loggedI
 		res.locals.loggedIn = false;
 		next();
 	}
-});
-app.get("/", (req, res) => res.render("home"));
-app.get('/favicon.ico' , (req, res) => res.sendFile(path.join(__dirname,"public/static/images/favicon.ico")));
-app.get("/*", (req, res) => { //TODO update the redirects as more pages are added
+}
+
+router.get("/*", (req, res) => { //TODO update the redirects as more pages are added
 	let reqUrl = req.path.substring(1).split('/'); //break uri into pieces
 	for(let i = 0;i<reqUrl.length;i++) reqUrl[i] = decodeURIComponent(reqUrl[i]); //unescape characters (i.e "%20" -> ' ')
-	if(reqUrl[0]=="logout"){
-		req.session.reset();
-		res.redirect("/login");
+	if(res.locals.loggedIn){
+		res.redirect("/dashboard");
 		return;
 	}
-	const loginForbidden = new Set(["newAccount","login","forgotPassword"]);
-	const loginRequired = new Set(["dashboard","profile"]);
-	if(res.locals.loggedIn){//user logged in
-		if(loginForbidden.has(reqUrl[0])){
-			res.redirect("/dashboard");
-			return;
-		}
-	}else{//user not logged in
-		if(loginRequired.has(reqUrl[0])){
-			res.redirect("/login");
-			return;
-		}
-	}
 	res.render(reqUrl[0]);
-}); //look in pages folder and return file matching name from request TODO add redirects
-app.get("/*", (req, res) => res.sendStatus(404)); //if all else fails, return 404
-//handle http post requests that match the pattern
-app.post("/*",bodyParser.json()); //ignore this, it parses data into req.body
-app.post("/*",bodyParser.urlencoded({extended: true})); //ignore this, it parses data into req.body
-app.post("/accountCreate", async (req, res) => { //handles account creation requests
+}); //look in pages folder and return file matching name from request TODO add redirect
+router.post("/accountCreate", async (req, res) => { //handles account creation requests
 	const username = req.body["usernameField"];
 	const email = req.body["emailField"];
 	const plaintextPassword = req.body["passwordField"];
@@ -137,7 +71,7 @@ app.post("/accountCreate", async (req, res) => { //handles account creation requ
 		res.status(400).send(err);
 	}
 });
-app.post("/login", async (req,res) => {
+router.post("/login", async (req,res) => {
 	const username = req.body["usernameField"];
 	const plaintextPassword = req.body["passwordField"];
 	try{
@@ -164,7 +98,7 @@ app.post("/login", async (req,res) => {
 		res.status(400).send(err);
 	}
 });
-app.post("/forgotPassword", async (req, res) =>{
+router.post("/forgotPassword", async (req, res) =>{
 	const emailAddress = req.body["emailField"];
 	try{
 		let result = await dbPool.query("select * from users where email=$1",[emailAddress]);
@@ -176,7 +110,7 @@ app.post("/forgotPassword", async (req, res) =>{
 			let timestampEncrypted = encrypt(timestamp);
 			let hmac = await bcrypt.hash(hmacSecret1+emailAddress+timestamp,saltRounds);
 			let hmacEncrypted = encrypt(hmac);
-			let fpURL = "https://gameconnect.herokuapp.com/resetPassword/"+encodeURIComponent(emailEncrypted)+'/'+encodeURIComponent(timestampEncrypted)+'/'+encodeURIComponent(hmacEncrypted);
+			let fpURL = "https://gameconnect.herokuapp.com/auth/resetPassword/"+encodeURIComponent(emailEncrypted)+'/'+encodeURIComponent(timestampEncrypted)+'/'+encodeURIComponent(hmacEncrypted);
 			let message = {
     			from: 'gameconnectapp@gmail.com',
     			to: emailAddress,
@@ -201,7 +135,7 @@ app.post("/forgotPassword", async (req, res) =>{
 		res.status(400).send(err);
 	}
 });
-app.post("/resetPassword/:email/:timestamp/:hmac", async (req, res) => {
+router.post("/resetPassword/:email/:timestamp/:hmac", async (req, res) => {
 	let email = decrypt(decodeURIComponent(req.params.email));
 	let timestamp = decrypt(decodeURIComponent(req.params.timestamp));
 	let hmac = decrypt(decodeURIComponent(req.params.hmac));
@@ -224,5 +158,7 @@ app.post("/resetPassword/:email/:timestamp/:hmac", async (req, res) => {
 	}
 });
 
-app.use((req, res) => res.sendStatus(418)); //if this is reached, the request was broken
-app.listen(port, () => console.log(`App listening on port ${port}!`)); //sets the app to listen on the given port
+router.use((req, res) => res.sendStatus(418)); //if this is reached, the request was broken
+
+module.exports.router = router;
+module.exports.authCheck = authCheck;

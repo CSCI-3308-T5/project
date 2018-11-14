@@ -106,7 +106,7 @@ newAccountForm.addEventListener("submit", function(event){ //TODO change how dat
 	}
 	$.ajax({ //send ajax request
 		type: "POST",
-		url: "/accountCreate", //send request to url /accountCreate
+		url: "/auth/accountCreate", //send request to url /accountCreate
 		data: $("#newAccountForm").serialize(), //convert data from form into json/xml (not sure which)
 		success: function(data){
 			if(data=="Success"){ //TODO redirect instead

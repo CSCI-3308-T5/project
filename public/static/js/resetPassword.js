@@ -60,7 +60,7 @@ resetPasswordForm.addEventListener("submit", function(event){ //TODO change how 
 				alert.innerHTML = "Success, redirecting to login... <button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
 				alert.className = "alert-success alert active"; //show alert
 				setTimeout( () => {
-       				window.location.href = "/login";
+       				window.location.href = "/auth/login";
     			}, 2000);
 			}else{
 				alert.innerHTML = data+"<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";

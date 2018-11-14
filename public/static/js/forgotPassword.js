@@ -29,9 +29,10 @@ forgotPasswordForm.addEventListener("submit", function(event){ //TODO change how
 	if(!emailCheck()){
 		return;
 	}
+	console.log("sending")
 	$.ajax({ //send ajax request
 		type: "POST",
-		url: "/forgotPassword", //send request to url /forgotPassword
+		url: "/auth/forgotPassword", //send request to url /forgotPassword
 		data: $("#forgotPasswordForm").serialize(), //convert data from form into json/xml (not sure which)
 		success: function(data){
 			if(data=="Success"){

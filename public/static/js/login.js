@@ -49,7 +49,7 @@ loginForm.addEventListener("submit", function(event){ //TODO change how data is 
 	}
 	$.ajax({ //send ajax request
 		type: "POST",
-		url: "/login", //send request to url /login
+		url: "/auth/login", //send request to url /login
 		data: $("#loginForm").serialize(), //convert data from form into json/xml (not sure which)
 		success: function(data){
 			if(data=="Success"){
