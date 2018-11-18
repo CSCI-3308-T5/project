@@ -1,0 +1,25 @@
+extends layout.pug
+
+append head
+	title Game Connect - Edit Game - #{gameData["gamename"]}
+block content
+	.row.whiteBox
+		.col-3
+			div(style="display:flex; justify-content:center;")
+				label(for="editImageURLField")
+					img.autoFit#imageEntry(src=gameData["pictureurl"])
+			.input-group
+				input.form-control#editImageURLField(type="url" placeholder="Image url" style="border-radius: 5px;" value= gameData["pictureurl"])
+				| &nbsp
+				span.input-group-btn: button.btn.btn-dark#urlLoad Load
+		.col-9
+			table(style="width: 100%; height: 100%;")
+				tr: td(valign="top")
+					H1#gameTitle #{gameData["gamename"]}
+					textarea.form-control#editDescriptionField(type="" rows="6" name="editDescriptionField", placeholder="Video game description") #{gameData["gamedescription"]}
+				tr: td(valign="bottom")
+					div(style="display: flex; justify-content: flex-end; margin-top: auto;")
+						button.btn.btn-primary#addGameSubmit(onclick="submitGame()") Submit
+			
+block scripts
+	script(src="/static/js/gameEdit.js")

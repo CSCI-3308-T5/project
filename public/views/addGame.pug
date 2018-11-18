@@ -1,0 +1,26 @@
+extends layout.pug
+
+append head
+	title Game Connect - Add Game
+block content
+	.row.whiteBox
+		.col-3
+			div(style="display:flex; justify-content:center;")
+				label(for="newImageURLField")
+					img.autoFit#imageEntry(src="/static/images/addPic.png")
+			.input-group
+				input.form-control#newImageURLField(type="url" placeholder="Image url" style="border-radius: 5px;")
+				| &nbsp
+				span.input-group-btn: button.btn.btn-dark#urlLoad(onclick="loadImage()") Load
+		.col-9
+			table(style="width: 100%; height: 100%;")
+				tr: td(valign="top")
+					input.form-control#newTitleField(type="text" name="newTitleField" placeholder="Video game title")
+					br
+					textarea.form-control#newDescriptionField(type="" rows="8" name="newDescriptionField", placeholder="Video game description")
+				tr: td(valign="bottom")
+					div(style="display: flex; justify-content: flex-end; margin-top: auto;")
+						button.btn.btn-primary#addGameSubmit(onclick="submitGame()") Submit
+			
+block scripts
+	script(src="/static/js/addGame.js")

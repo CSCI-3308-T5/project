@@ -3,7 +3,6 @@ var passwordField = document.getElementById("passwordField");
 var passwordError = document.getElementById("passwordError");
 var passwordConfirmField = document.getElementById("passwordConfirmField");
 var passwordConfirmError = document.getElementById("passwordConfirmError");
-var alert = document.getElementById("alert");
 
 function passwordCheck(){
 	if(passwordConfirmField.value.length!=0) passwordConfirmCheck();
@@ -39,11 +38,6 @@ function passwordConfirmCheck(){
 	}
 }
 
-function hideAlert(){
-	alert.innerHTML = "";
-	alert.className = "alert"; //hide alert at top of page
-}
-
 passwordField.addEventListener("input", passwordCheck);
 passwordConfirmField.addEventListener("input", passwordConfirmCheck);
 resetPasswordForm.addEventListener("submit", function(event){ //TODO change how data is sent to encrypt password and whatnot
@@ -57,14 +51,12 @@ resetPasswordForm.addEventListener("submit", function(event){ //TODO change how 
 		data: $("#resetPasswordForm").serialize(), //convert data from form into json/xml (not sure which)
 		success: function(data){
 			if(data=="Success"){ //TODO redirect instead
-				alert.innerHTML = "Success, redirecting to login... <button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
-				alert.className = "alert-success alert active"; //show alert
+				showAlertSuccess("Success, redirecting to login...");
 				setTimeout( () => {
        				window.location.href = "/auth/login";
     			}, 2000);
 			}else{
-				alert.innerHTML = data+"<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
-				alert.className = "alert-danger alert active"; //show alert
+				showAlert(data);
 			}
 		}
 	});

@@ -9,7 +9,18 @@
 	text-decoration-line: none;
 }
 
-.loginForm {
+/* visited link */
+.plain-link-dark:link, .plain-link-dark:visited, .plain-link-dark:active {
+    color: #404040;
+}
+
+/* mouse over link */
+.plain-link-dark:hover {
+	color: grey;
+	text-decoration-line: none;
+}
+
+.whiteBox {
 	background-color: white;
 	color: black;
 	border-radius: 10px;
@@ -71,6 +82,17 @@ body {
 	width: 30px;
 }
 
+.autoFit {
+	width: 100%;
+	max-height: 100%;
+	height: auto;
+	object-fit: contain;
+}
+
+.centerBox {
+	display:flex;
+	justify-content:center;
+}
 
 /*Begin 5 Star Rating CSS*/
 
@@ -98,11 +120,11 @@ body {
     content: '★ ';
 }
 .rate > input:checked ~ label {
-    color: #ffc700;    
+    color: #ffc700;
 }
 .rate:not(:checked) > label:hover,
 .rate:not(:checked) > label:hover ~ label {
-    color: #deb217;  
+    color: #deb217;
 }
 .rate > input:checked + label:hover,
 .rate > input:checked + label:hover ~ label,

@@ -38,14 +38,30 @@ var dbPool = new pg.Pool({
 
 var emailTransporter = nodemailer.createTransport(emailURL);
 
+async function getRatings(userid){
+	let results = (await dbPool.query("select * from game_ratings where id=$1",[userid])).rows[0];
+	var ret = [];
+	for(var name in results){
+		if(results[name]&&name!="id")ret.push([name,results[name]]);
+	}
+	ret.sort();
+	return ret;
+}
+async function getRating(userid,gamename){
+	return (await dbPool.query("select * from game_ratings where id=$1",[userid])).rows[0][gamename];
+}
+
 module.exports.saltRounds = saltRounds;
 module.exports.dbPool = dbPool;
 module.exports.emailTransporter = emailTransporter;
 module.exports.hmacSecret1 = hmacSecret1;
 module.exports.encryptionSecret = encryptionSecret;
 module.exports.client_session_secret = client_session_secret;
+module.exports.getRatings = getRatings;
+module.exports.getRating = getRating;
 
-var auth = require("./auth.js");
+var authRouter = require("./auth.js");
+var gamesRouter = require("./games.js");
 
 if(production){ //when deployed on heroku, forward all requests to https (we can still write in http because heroku handles https for us)
 	app.use((req, res, next) => {
@@ -71,14 +87,23 @@ app.use(clientSession({
 	secureProxy: true, //cookie only sent over https connections
 }));
 //handle http get requests that match the pattern
-app.use(auth.authCheck);
+app.use(authRouter.authCheck);
 
 app.get("/", (req, res) => res.render("home"));
 app.get('/favicon.ico' , (req, res) => res.sendFile(path.join(__dirname,"../public/static/images/favicon.ico")));
 //handle http post requests that match the pattern
 app.post("/*",bodyParser.json()); //ignore this, it parses data into req.body
 app.post("/*",bodyParser.urlencoded({extended: true})); //ignore this, it parses data into req.body
-app.use("/auth", auth.router);
+app.use("/auth", authRouter.router);
+app.use("/games", gamesRouter.router);
+app.get("/dashboard", async (req, res) => {
+	if(!res.locals.loggedIn){
+		res.redirect("/auth/login");
+		return;
+	}
+	res.locals.gameRatings = await getRatings(req.session.userid);
+	res.render("dashboard");
+});
 app.get("/*", (req, res) => { //TODO update the redirects as more pages are added
 	let reqUrl = req.path.substring(1).split('/'); //break uri into pieces
 	for(let i = 0;i<reqUrl.length;i++) reqUrl[i] = decodeURIComponent(reqUrl[i]); //unescape characters (i.e "%20" -> ' ')
@@ -87,7 +112,7 @@ app.get("/*", (req, res) => { //TODO update the redirects as more pages are adde
 		res.redirect("/auth/login");
 		return;
 	}
-	const loginRequired = new Set(["dashboard","profile"]);
+	const loginRequired = new Set(["profile"]);
 	if(!res.locals.loggedIn && loginRequired.has(reqUrl[0])){
 		res.redirect("/auth/login");
 		return;
@@ -96,6 +121,6 @@ app.get("/*", (req, res) => { //TODO update the redirects as more pages are adde
 }); //look in pages folder and return file matching name from request TODO add redirects
 app.get("/*", (req, res) => res.sendStatus(404)); //if all else fails, return 404
 
-
+app.post("/*",(req,res,next) => {console.log(req.body);next()})
 app.use((req, res) => res.sendStatus(418)); //if this is reached, the request was broken
 app.listen(port, () => console.log(`App listening on port ${port}!`)); //sets the app to listen on the given port

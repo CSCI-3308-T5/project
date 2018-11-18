@@ -1,4 +1,14 @@
 doctype html
+
+mixin rating(val,n)
+	.rate(name="Game#"+val style="position:relative; left: 20%;")
+		-for(let num = 5;num>0;num--)
+			if num==n
+				input(type="radio" id="star#"+val+"-"+num name="GameName#"+val value=num checked)
+			else
+				input(type="radio" id="star#"+val+"-"+num name="GameName#"+val value=num)
+			label(for="star#"+val+"-"+num)
+	
 html
 	head
 		block head
@@ -7,22 +17,17 @@ html
 		link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous")
 		link(rel="stylesheet" href="/static/css/stylesheet.css")
 		block styles
-		script.
-			function submitSearch(){
-				alert("Congrats you have successfully completed a search. woot woot.");
-			}
 	body(style="background-color: gray;")
 		nav#header.navbar.navbar-dark.bg-dark.text-grey
-			a.navbar-brand(href="/")
-				img(width="36" height="36" src="/static/images/drawing.svg")
-				|  Game Connect
-
-			#searchbar(style="position:relative; left:-15%;")
-				if loggedIn
+			div
+				a.navbar-brand(href="/")
+					img(width="36" height="36" src="/static/images/drawing.svg")
+					|  Game Connect
+						
+				#searchbar(style="display:inline-block;")
 					form(onsubmit="submitSearch()")
-						input(type="text", placeholder=" Search For Games", name="search", style=" border:solid; border-width:2px; border-top-left-radius:10px; border-bottom-left-radius:10px; width:450px; height:38px;")
-
-						button(type="submit" style="border:solid; border-width:2px; border-top-right-radius:10px; border-bottom-right-radius:10px; position:relative; left:-2px; height:38px;", value="submit")
+						input.border-dark(type="text", placeholder=" Search For Games", name="search", style=" border:solid; border-width:2px; border-top-left-radius:10px; border-bottom-left-radius:10px; width:450px; height:38px;")
+						button.border-dark(type="submit" style="border:solid; border-width:2px; border-top-right-radius:10px; border-bottom-right-radius:10px; position:relative; left:-2px; height:38px;", value="submit")
 							i.fa.fa-search
 
 			#accountButtons
@@ -55,4 +60,5 @@ html
 		script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
 		script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous")
 		script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous")
+		script(src="/static/js/all.js")
 		block scripts

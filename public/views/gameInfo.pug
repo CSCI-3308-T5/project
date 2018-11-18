@@ -1,0 +1,19 @@
+extends layout.pug
+
+append head
+	title Game Connect - #{gameData["gamename"]}
+block content
+	.row.whiteBox
+		.col-3
+			.centerBox
+				img.autoFit(src=gameData["pictureurl"])
+			.offset-1
+				+rating(gameData["gamename"],gameRating)
+		.col-9
+			H1 #{gameData["gamename"]}
+			a.plain-link-dark.pr-4.fs-18px(href="/games/"+gameData["gamename"]+"/edit" style="position:absolute;top:0;right:0")
+				| Edit 
+				span: i.fas.fa-edit
+			p.fs-18px #{gameData["gamedescription"]}
+block scripts
+	script(src="/static/js/gameInfo.js")

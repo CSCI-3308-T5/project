@@ -4,7 +4,6 @@ var usernameError = document.getElementById("usernameError");
 var passwordField = document.getElementById("passwordField");
 var passwordError = document.getElementById("passwordError");
 var rememberMeBox = document.getElementById("rememberMeBox");
-var alert = document.getElementById("alert");
 
 function usernameCheck(){
 	if(usernameField.value.length==0){
@@ -34,11 +33,6 @@ function passwordCheck(){
 	}
 }
 
-function hideAlert(){
-	alert.innerHTML = "";
-	alert.className = "alert"; //hide alert at top of page
-}
-
 usernameField.addEventListener("input", usernameCheck);
 passwordField.addEventListener("input", passwordCheck);
 
@@ -55,8 +49,7 @@ loginForm.addEventListener("submit", function(event){ //TODO change how data is 
 			if(data=="Success"){
 				window.location.replace("dashboard");
 			}else{
-				alert.innerHTML = data+"<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
-				alert.className = "alert-danger alert active"; //show alert
+				showAlert(data);
 			}
 		}
 	});

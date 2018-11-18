@@ -36,11 +36,9 @@ forgotPasswordForm.addEventListener("submit", function(event){ //TODO change how
 		data: $("#forgotPasswordForm").serialize(), //convert data from form into json/xml (not sure which)
 		success: function(data){
 			if(data=="Success"){
-				alert.innerHTML = "Please check your inbox for a password reset email. <button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
-				alert.className = "alert-success alert active"; //show alert
+				showAlertSuccess("Please check your inbox for a password reset email.");
 			}else{
-				alert.innerHTML = data+"<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
-				alert.className = "alert-danger alert active"; //show alert
+				showAlert(data);
 			}
 		}
 	});

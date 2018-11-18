@@ -9,7 +9,6 @@ var passwordConfirmField = document.getElementById("passwordConfirmField");
 var passwordConfirmError = document.getElementById("passwordConfirmError");
 var termsAndCondsBox = document.getElementById("termsAndCondsBox");
 var termsError = document.getElementById("termsError");
-var alert = document.getElementById("alert");
 
 function usernameCheck(){
 	const usernameRegex = /^[a-zA-Z0-9]*$/;
@@ -89,11 +88,6 @@ function termsCheck(){
 	}
 }
 
-function hideAlert(){
-	alert.innerHTML = "";
-	alert.className = "alert"; //hide alert at top of page
-}
-
 usernameField.addEventListener("input", usernameCheck);
 emailField.addEventListener("input", emailCheck);
 passwordField.addEventListener("input", passwordCheck);
@@ -110,14 +104,12 @@ newAccountForm.addEventListener("submit", function(event){ //TODO change how dat
 		data: $("#newAccountForm").serialize(), //convert data from form into json/xml (not sure which)
 		success: function(data){
 			if(data=="Success"){ //TODO redirect instead
-				alert.innerHTML = "Success, redirecting to login...<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
-				alert.className = "alert-success alert active"; //show alert
+				showAlertSuccess("Success, redirecting to login...");
 				setTimeout( () => {
        				window.location.href = "/login";
     			}, 2000);
 			}else{
-				alert.innerHTML = data+"<button type=\"button\" class=\"close\" onclick=\"hideAlert();\"><span>&times;</span></button>";
-				alert.className = "alert-danger alert active"; //show alert
+				showAlert(data);
 			}
 		}
 	});

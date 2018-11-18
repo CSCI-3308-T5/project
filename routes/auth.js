@@ -61,6 +61,7 @@ router.post("/accountCreate", async (req, res) => { //handles account creation r
 		if(result.rows.length==0){
 			let hash = await bcrypt.hash(plaintextPassword, saltRounds);
 			await dbPool.query("insert into users (username, email, hashedpass) values ($1,$2,$3)",[username, email, hash]);
+			await dbPool.query("insert into game_ratings default values;");
 			res.send("Success");
 		}else{
 			if(result.rows[0].username==username)res.send("An account with that username already exists");
@@ -88,6 +89,7 @@ router.post("/login", async (req,res) => {
 				}
 				let hash = await bcrypt.hash(hmacSecret1+req.session.username+req.session.timestamp,saltRounds);
 				req.session.hash = hash;
+				req.session.userid = result.rows[0]["id"];
 				res.send("Success");
 			}else{
 				res.send("Incorrect password");

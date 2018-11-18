@@ -4,16 +4,36 @@ append head
 	title Game Connect - Dashboard
 block content
 	.row
-		h2 Here's some games you'll enjoy!
-	.row
-		<br>Reccomended Game Number One
-	.row
-		<br>Reccomended Game Number Two
-	.row
-		<br>Reccomended Game Number Three
-	.row
-		<br>Reccomended Game Number Four
-	
+		.col-6
+			.col-12.whiteBox
+				H2 Game Ratings
+				.row
+					.col-8
+						input.form-control#newRatingTitleField(type="text" name="newRatingTitleField" placeholder="Game title")
+						span.error#newRatingTitleError
+					.col-4
+						+rating("newgame")
+				#ratings
+					- for(let g of gameRatings)
+						.row
+							.col-8
+								a.fs-24px(href="/games/"+encodeURIComponent(g[0])) #{g[0]}
+							.col-4
+								+rating(g[0],g[1])
+		.col-6
+			.col-12.whiteBox(style="padding-right:40px; padding-left:40px;")
+				.row(style="display: flex; justify-content: space-between;")
+					H2 Recommended Games
+					button.btn.btn-dark#populate(onclick="getRecommendations()") Populate
+				table.table#recommendationTable
+					tr
+						th(scope="col") Game Title
+						th(scope="col") Score
+					- for (let a = 0;a<20;a++)
+						tr
+							td
+							td
+					
 
 block scripts
 	script(src="/static/js/dashboard.js")
