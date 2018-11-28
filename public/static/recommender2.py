@@ -3,7 +3,27 @@ import pandas as pd
 import numpy as np
 import math
 import sys
+import os
 
+DATABASE_URL = os.environ['DATABASE_URL']
+'''
+#Acessing Heroku Postgres
+
+import os
+import psycopg2
+
+DATABASE_URL = os.environ['DATABASE_URL']
+
+try:
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+except:
+    print('unable to connect')
+
+cur = conn.cursor()
+
+results = cur.execute("""SELECT * FROM users"""")
+
+'''
 
 def mean(array):
     sum=0
@@ -95,9 +115,12 @@ def find_sim_items(userId,maxsim_list):
 
 
 #sql connection
-conn_string = "host=localhost dbname='testing' user='postgres' password=foo"
 try:
-    conn = psycopg2.connect(conn_string)
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+except:
+    print('unable to connect')
+
+try:
     cur = conn.cursor()
     cur.execute('SELECT * FROM datatest')
     output = cur.fetchall()
