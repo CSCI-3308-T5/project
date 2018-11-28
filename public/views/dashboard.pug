@@ -11,14 +11,14 @@ block content
 					.col-8
 						input.form-control#newRatingTitleField(type="text" name="newRatingTitleField" placeholder="Game title")
 						span.error#newRatingTitleError
-					.col-4
+					.col-4(style="min-width:200px;")
 						+rating("newgame")
 				#ratings
 					- for(let g of gameRatings)
 						.row
-							.col-8
+							.col-7
 								a.fs-24px(href="/games/"+encodeURIComponent(g[0])) #{g[0]}
-							.col-4
+							.col-5(style="min-width:200px;")
 								+rating(g[0],g[1])
 		.col-6
 			.col-12.whiteBox(style="padding-right:40px; padding-left:40px;")
