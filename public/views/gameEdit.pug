@@ -7,7 +7,10 @@ block content
 		.col-3
 			div(style="display:flex; justify-content:center;")
 				label(for="editImageURLField")
-					img.autoFit#imageEntry(src=gameData["pictureurl"])
+					if gameData["pictureurl"] == ""
+						img.autoFit#imageEntry(src="/static/images/addPic.png")
+					else
+						img.autoFit#imageEntry(src=gameData["pictureurl"])
 			.input-group
 				input.form-control#editImageURLField(type="url" placeholder="Image url" style="border-radius: 5px;" value= gameData["pictureurl"])
 				| &nbsp

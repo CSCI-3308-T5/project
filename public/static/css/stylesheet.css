@@ -94,6 +94,12 @@ body {
 	justify-content:center;
 }
 
+.flex-justify {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
 /*Begin 5 Star Rating CSS*/
 
 

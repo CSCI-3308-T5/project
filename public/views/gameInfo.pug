@@ -6,8 +6,11 @@ block content
 	.row.whiteBox
 		.col-3
 			.centerBox
-				img.autoFit(src=gameData["pictureurl"])
-			.offset-1
+				if gameData["pictureurl"] == ""
+					img.autoFit(src="/static/images/addPic.png")
+				else
+					img.autoFit(src=gameData["pictureurl"])
+			div(style="display: flex; justify-content: center;")
 				+rating(gameData["gamename"],gameRating)
 		.col-9
 			H1 #{gameData["gamename"]}

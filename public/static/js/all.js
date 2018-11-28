@@ -3,13 +3,9 @@ function submitSearch(){
 }
 
 function newStarRatingAndLink(v,n){
-	return `<div class="row">
-				<div class="col-8">
-					<a class="fs-24px" href="/games/`+encodeURIComponent(v)+`">`+v+`</a>
-				</div>
-				<div class="col-4" style="min-width:200px;">
-					`+newStarRating(v,n)+`
-				</div>
+	return `<div class="flex-justify">
+				<a class="fs-24px" href="/games/`+encodeURIComponent(v)+`">`+v+`</a>
+				`+newStarRating(v,n)+`
 			</div>`;
 }
 
@@ -21,7 +17,7 @@ function newStarRating(v,num){
 		else s+=`<input type="radio" id="star#`+v+`-`+num+`" name="GameName#`+v+`" value="`+num+`" />
 				 <label for="star#`+v+`-`+num+`" title="text"></label>`;
 	}
-	return `<div class="rate" name="Game#`+v+`-" style="position:relative; left: 20%;">
+	return `<div class="rate" name="Game#`+v+`-">
 				`+s+`
 			</div>`;
 }
