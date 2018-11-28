@@ -7,7 +7,7 @@ function newStarRatingAndLink(v,n){
 				<div class="col-8">
 					<a class="fs-24px" href="/games/`+encodeURIComponent(v)+`">`+v+`</a>
 				</div>
-				<div class="col-4">
+				<div class="col-4" style="min-width:200px;">
 					`+newStarRating(v,n)+`
 				</div>
 			</div>`;
