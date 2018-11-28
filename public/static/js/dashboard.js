@@ -26,6 +26,7 @@ $(document).ready(function(){
 			if(name==""){
 				newRatingTitleError.className = "error active";
 				newRatingTitleError.innerHTML = "Please enter the name of a game."
+				document.getElementById(clickId).checked = false;
 				return;
 			}else{
 				newRatingTitleError.className = "error";

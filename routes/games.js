@@ -53,9 +53,9 @@ router.post("/add", async (req, res) => {
 		res.status(400).send(err);
 	}
 });
-router.post("/:gamename/edit", async (req, res) => {
+router.post("/edit", async (req, res) => {
 	try{
-		await dbPool.query("update games set pictureurl=$1 gamedescription=$2 where gamename=$3;",[req.body["pictureurl"],req.body["description"],req.body["title"]]);
+		await dbPool.query("update games set pictureurl=$1, gamedescription=$2 where gamename=$3;",[req.body["pictureurl"],req.body["description"],req.body["title"]]);
 		res.send("Success");
 	}catch(err){
 		console.log(err);

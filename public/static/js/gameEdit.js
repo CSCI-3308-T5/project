@@ -1,6 +1,6 @@
 var imageEntry = document.getElementById("imageEntry");
-var imageURLField = document.getElementById("newImageURLField");
-var descriptionField = document.getElementById("newDescriptionField");
+var imageURLField = document.getElementById("editImageURLField");
+var descriptionField = document.getElementById("editDescriptionField");
 const gameTitle = document.getElementById("gameTitle").innerText;
 
 function loadImage(){
