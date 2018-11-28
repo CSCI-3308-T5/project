@@ -4,10 +4,10 @@ function submitSearch(){
 
 function newStarRatingAndLink(v,n){
 	return `<div class="row">
-				<div class="col-8">
+				<div class="col-7">
 					<a class="fs-24px" href="/games/`+encodeURIComponent(v)+`">`+v+`</a>
 				</div>
-				<div class="col-4" style="min-width:200px;">
+				<div class="col-5" style="min-width:200px; position:relative; left:-3.5%;">
 					`+newStarRating(v,n)+`
 				</div>
 			</div>`;
