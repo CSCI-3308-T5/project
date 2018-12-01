@@ -3,23 +3,16 @@ function submitSearch(){
 }
 
 function newStarRatingAndLink(v,n){
-	return `<div class="flex-justify">
-				<a class="fs-24px" href="/games/`+encodeURIComponent(v)+`">`+v+`</a>
-				`+newStarRating(v,n)+`
-			</div>`;
+	return `<div class="flex-justify"><a class="fs-24px" href="/games/`+encodeURIComponent(v)+`">`+v+`</a>`+newStarRating(v,n)+`</div>`;
 }
 
 function newStarRating(v,num){
 	let s = "";
 	for(var i = 5;i>0;i--){
-		if(i==num)s+=`<input type="radio" id="star#`+v+`-`+num+`" name="GameName#`+v+`" value="`+num+`" checked />
-					<label for="star#`+v+`-`+num+`" title="text"></label>`;
-		else s+=`<input type="radio" id="star#`+v+`-`+num+`" name="GameName#`+v+`" value="`+num+`" />
-				 <label for="star#`+v+`-`+num+`" title="text"></label>`;
+		if(i==num)s+=`<input type="radio" id="star#`+v+`-`+i+`" name="GameName#`+v+`" value="`+i+`" checked /><label for="star#`+v+`-`+i+`" title="text"></label>`;
+		else s+=`<input type="radio" id="star#`+v+`-`+i+`" name="GameName#`+v+`" value="`+i+`" /><label for="star#`+v+`-`+i+`" title="text"></label>`;
 	}
-	return `<div class="rate" name="Game#`+v+`-">
-				`+s+`
-			</div>`;
+	return `<div class="rate" id="Game#`+v+`">`+s+`</div>`;
 }
 
 function showAlert(msg){

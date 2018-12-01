@@ -1,7 +1,7 @@
 doctype html
 
 mixin rating(val,n)
-	.rate(name="Game#"+val style="white-space: nowrap;")
+	.rate(id="Game#"+val style="white-space: nowrap;")
 		-for(let num = 5;num>0;num--)
 			if num==n
 				input(type="radio" id="star#"+val+"-"+num name="GameName#"+val value=num checked)

@@ -40,7 +40,8 @@ router.post("/rate", async (req, res) => {
 		res.send("DNE"); //Does Not Exist
 		return;
 	}
-	await dbPool.query("update game_ratings set \""+req.body["name"]+"\"=$1 where id=$2;",[req.body["rating"],req.session.userid]);
+	if(req.body["rating"]!=0) await dbPool.query("update game_ratings set \""+req.body["name"]+"\"=$1 where id=$2;",[req.body["rating"],req.session.userid]);
+	else await dbPool.query("update game_ratings set \""+req.body["name"]+"\"=NULL where id=$1;",[req.session.userid]);
 	res.send("Success");
 });
 router.post("/add", async (req, res) => {
