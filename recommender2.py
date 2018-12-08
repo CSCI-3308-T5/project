@@ -5,7 +5,6 @@ import math
 import sys
 import os
 
-DATABASE_URL = os.environ['DATABASE_URL']
 '''
 #Acessing Heroku Postgres
 
@@ -113,39 +112,40 @@ def find_sim_items(userId,maxsim_list):
 
 
 
+if __name__ == "__main__":
+    DATABASE_URL = os.environ['DATABASE_URL']
+    #sql connection
+    try:
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    except:
+        print('unable to connect')
 
-#sql connection
-try:
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-except:
-    print('unable to connect')
+    try:
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM datatest')
+        output = cur.fetchall()
+    except:
+        print("Error: No connection found")
 
-try:
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM datatest')
-    output = cur.fetchall()
-except:
-    print("Error: No connection found")
+    #my additions
+    d = {}
+    for i in range(0, len(output)):
+        mylen = len(output[i]) - 1
+        arr = np.empty(mylen)
+        arr.fill(0)
+        d.update({output[i][0]:arr})
+        for j in range(0, len(arr)):
+            arr[j] = output[i][j + 1]
 
-#my additions
-d = {}
-for i in range(0, len(output)):
-    mylen = len(output[i]) - 1
-    arr = np.empty(mylen)
-    arr.fill(0)
-    d.update({output[i][0]:arr})
-    for j in range(0, len(arr)):
-        arr[j] = output[i][j + 1]
+        arr[np.arange(arr.size - 1)]
 
-    arr[np.arange(arr.size - 1)]
+    df=pd.DataFrame(d)
+    a=df.values.T.tolist()
+    similarItems=find_sim_items(1,maxSimilarity(1,a))
+    val=similarItems[2][0]
+    b=list(df)
+    print(b[val])
+    sys.stdout.flush()
 
-df=pd.DataFrame(d)
-a=df.values.T.tolist()
-similarItems=find_sim_items(1,maxSimilarity(1,a))
-val=similarItems[2][0]
-b=list(df)
-print(b[val])
-sys.stdout.flush()
-
-cur.close()
-conn.close()
+    cur.close()
+    conn.close()
