@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const router = express.Router();
+const {spawn} = require('child_process');
 
 var main = require("./index.js");
 var dbPool = main.dbPool;
@@ -63,8 +64,18 @@ router.post("/edit", async (req, res) => {
 		res.status(400).send(err);
 	}
 });
-router.post("/recommendations", async (req, res) => {
-	//TODO get recommendations and send them back
+
+router.get("/recommendations", async (req, res) => {
+	//calls the recommender with the argument passed through req.body
+	try {
+		let recommender = spawn('python', ['../recommender2.py', req.session.userid]);
+		recommender.stdout.on('data', (data) => {
+			res.send(data.toString());
+		});
+	} catch(err) {
+		console.log(err);
+		res.status(400).send('recommendation failed');
+	}
 });
 
 router.use((req, res) => res.sendStatus(418)); //if this is reached, the request was broken

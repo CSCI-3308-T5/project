@@ -4,12 +4,16 @@ var ratings = document.getElementById("ratings");
 
 function getRecommendations(){
 	$.ajax({ //send ajax request
-		type: "POST",
+		type: "GET",
 		contentType: "application/json",
 		url: "/games/recommendations",
-		data: "",
-		success: function(data){//TODO
-
+		//data: "",
+		success: function(data){
+			if(data != 'recommendation failed') {
+				window.location.href=`/games/${data}`;
+			} else {
+				showAlert(data);
+			}
 		}
 	});
 }
