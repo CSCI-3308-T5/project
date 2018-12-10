@@ -7,7 +7,7 @@ import os
 
 #This allows for the express server to pass the script a userId
 #ternary is to hopefully avoid compromising the test scripts
-userId = int(sys.argv[1]) if len(argv) == 2 else 1;
+userId = int(sys.argv[1]) if len(sys.argv) == 2 else 1;
 
 def mean(array):
     sum=0
