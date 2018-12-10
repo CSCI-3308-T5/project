@@ -5,24 +5,9 @@ import math
 import sys
 import os
 
-'''
-#Acessing Heroku Postgres
-
-import os
-import psycopg2
-
-DATABASE_URL = os.environ['DATABASE_URL']
-
-try:
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-except:
-    print('unable to connect')
-
-cur = conn.cursor()
-
-results = cur.execute("""SELECT * FROM users"""")
-
-'''
+#This allows for the express server to pass the script a userId
+#ternary is to hopefully avoid compromising the test scripts
+userId = int(sys.argv[1]) if len(argv) == 2 else 1;
 
 def mean(array):
     sum=0
@@ -141,7 +126,7 @@ if __name__ == "__main__":
 
     df=pd.DataFrame(d)
     a=df.values.T.tolist()
-    similarItems=find_sim_items(1,maxSimilarity(1,a))
+    similarItems=find_sim_items(userId,maxSimilarity(userId,a))
     val=similarItems[2][0]
     b=list(df)
     print(b[val])
