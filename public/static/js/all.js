@@ -1,5 +1,14 @@
-function submitSearch(){
+function keydown(e){ //Allows for searching by pressing enter instead of clicking on search icon
+	if (e.keyCode === 13){ 
+		submitSearch();
+	}
+}
 
+
+function submitSearch(){
+	var name = document.getElementById("searchbar").value;
+	var addressName = "/games/"+name;
+	window.open(addressName); //<-- This opens the page without checking if a game under searched name exists. 
 }
 
 function newStarRatingAndLink(v,n){
