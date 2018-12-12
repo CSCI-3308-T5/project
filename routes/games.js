@@ -6,6 +6,13 @@ const child_process = require('child_process');
 var main = require("./index.js");
 var dbPool = main.dbPool;
 
+function removeNewline(s){
+	if(s[s.length-1]=='\n'){
+		return s.substring(0,s.length-1);
+	}
+	return s;
+}
+
 router.get("/*", (req, res, next) => { //TODO update the redirects as more pages are added
 	if(!res.locals.loggedIn){
 		res.redirect("/auth/login");
@@ -68,7 +75,7 @@ router.post("/edit", async (req, res) => {
 router.post("/recommendations", async (req, res) => {
 	//calls the recommender with the argument passed through req.body
 	try {
-		child_process.exec('python recommender2.py '+req.session.userid+' \"'+main.dbURL.substring(0,main.dbURL.length-1)+'\"',(err,out,err2) => {
+		child_process.exec('python recommender2.py '+req.session.userid+' \"'+removeNewline(main.dbURL)+'\"',(err,out,err2) => {
 			console.log("ERR:  ",err);
 			console.log("ERR2: ",err2);
 			res.send(out)
