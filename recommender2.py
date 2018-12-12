@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
     try:
         cur = conn.cursor()
-        cur.execute('SELECT * FROM datatest')
+        cur.execute('SELECT * FROM game_ratings')
         output = cur.fetchall()
     except:
         print("Error: No connection found")

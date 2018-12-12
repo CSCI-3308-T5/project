@@ -65,8 +65,8 @@ router.post("/edit", async (req, res) => {
 	}
 });
 
-router.get("/recommendations", async (req, res) => {
-	//calls the recommender with the argument passed through req.body
+router.post("/recommendations", async (req, res) => {
+	console.log('get')
 	try {
 		let recommender = spawn('python', ['../recommender2.py', req.session.userid]);
 		recommender.stdout.on('data', (data) => {
