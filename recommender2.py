@@ -90,7 +90,7 @@ def find_sim_items(userId,maxsim_list):
 
 
 if __name__ == "__main__":
-	DATABASE_URL = sys.argv[2]
+    DATABASE_URL = sys.argv[2]
     #sql connection
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
