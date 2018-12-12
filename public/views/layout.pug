@@ -24,11 +24,12 @@ html
 					img(width="36" height="36" src="/static/images/drawing.svg")
 					|  Game Connect
 						
-				#searchbar(style="display:inline-block;")
-					form(onsubmit="submitSearch()")
-						input.border-dark(type="text", placeholder=" Search For Games", name="search", style=" border:solid; border-width:2px; border-top-left-radius:10px; border-bottom-left-radius:10px; width:450px; height:38px;")
-						button.border-dark(type="submit" style="border:solid; border-width:2px; border-top-right-radius:10px; border-bottom-right-radius:10px; position:relative; left:-2px; height:38px; top:-1px", value="submit")
-							i.fa.fa-search
+				div(style="display:inline-block;")
+					if loggedIn
+						form(onsubmit="submitSearch()")
+							input.border-dark(type="text", placeholder=" Search For Games", name="search", style=" border:solid; border-width:2px; border-top-left-radius:10px; border-bottom-left-radius:10px; width:450px; height:38px;")
+							button.border-dark(type="submit" style="border:solid; border-width:2px; border-top-right-radius:10px; border-bottom-right-radius:10px; position:relative; left:-2px; height:38px; top:-1px", value="submit")
+								i.fa.fa-search
 
 			#accountButtons
 				if !loggedIn
