@@ -53,6 +53,7 @@ async function getRating(userid,gamename){
 
 module.exports.saltRounds = saltRounds;
 module.exports.dbPool = dbPool;
+module.exports.dbURL = dbURL;
 module.exports.emailTransporter = emailTransporter;
 module.exports.hmacSecret1 = hmacSecret1;
 module.exports.encryptionSecret = encryptionSecret;

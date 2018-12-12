@@ -8,15 +8,7 @@ import os
 #This allows for the express server to pass the script a userId
 #ternary is to hopefully avoid compromising the test scripts
 userId = int(sys.argv[1]) if len(sys.argv) == 2 else 1;
-
-def mean(array):
-    sum=0
-    count=0
-    for i in array:
-        if i!=0:
-            sum+=int(i)
-            count+=1
-    return float(sum/count)
+DATABASE_URL = sys.argv[2]
 
 
 #def cosSim(x row of scores, y row of scores) of equal length
@@ -24,13 +16,11 @@ def cosSim(x,y):
     sum=0
     sumx=0
     sumy=0
-    meanx=mean(x)
-    meany=mean(y)
     for i in range(0, len(x)):
-
         sum+=x[i]*y[i]
         sumx+=x[i]**2
         sumy+=y[i]**2
+    if(sumx==0 or sumy==0): return 0
     final=sum/(math.sqrt(sumx)*math.sqrt(sumy))
     return final
 
@@ -91,6 +81,9 @@ def find_sim_items(userId,maxsim_list):
                 sum1+=b[user-1][j]*maxsim_list[j][1]
                 if b[user-1][j]!=0:
                     count+=maxsim_list[j][1]
+            if(count==0):
+                i += 1
+                continue
             bestItems=reorganize_list([i,float(sum1/count)],bestItems)
         i+=1
     return bestItems
@@ -98,39 +91,16 @@ def find_sim_items(userId,maxsim_list):
 
 
 if __name__ == "__main__":
-    DATABASE_URL = os.environ['DATABASE_URL']
     #sql connection
-    try:
-        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    except:
-        print('unable to connect')
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 
-    try:
-        cur = conn.cursor()
-        cur.execute('SELECT * FROM datatest')
-        output = cur.fetchall()
-    except:
-        print("Error: No connection found")
-
-    #my additions
-    d = {}
-    for i in range(0, len(output)):
-        mylen = len(output[i]) - 1
-        arr = np.empty(mylen)
-        arr.fill(0)
-        d.update({output[i][0]:arr})
-        for j in range(0, len(arr)):
-            arr[j] = output[i][j + 1]
-
-        arr[np.arange(arr.size - 1)]
-
-    df=pd.DataFrame(d)
+    df=pd.read_sql("select * from game_ratings order by id asc",conn)
+    df=df.replace({np.nan:0})
+    df=df.drop(columns=['id'])
     a=df.values.T.tolist()
     similarItems=find_sim_items(userId,maxSimilarity(userId,a))
     val=similarItems[2][0]
     b=list(df)
     print(b[val])
     sys.stdout.flush()
-
-    cur.close()
     conn.close()

@@ -4,7 +4,7 @@ var ratings = document.getElementById("ratings");
 
 function getRecommendations(){
 	$.ajax({ //send ajax request
-		type: "GET",
+		type: "POST",
 		contentType: "application/json",
 		url: "/games/recommendations",
 		//data: "",
