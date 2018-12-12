@@ -8,7 +8,6 @@ import os
 #This allows for the express server to pass the script a userId
 #ternary is to hopefully avoid compromising the test scripts
 userId = int(sys.argv[1]) if len(sys.argv) == 2 else 1;
-DATABASE_URL = sys.argv[2]
 
 
 #def cosSim(x row of scores, y row of scores) of equal length
@@ -91,6 +90,7 @@ def find_sim_items(userId,maxsim_list):
 
 
 if __name__ == "__main__":
+	DATABASE_URL = sys.argv[2]
     #sql connection
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 

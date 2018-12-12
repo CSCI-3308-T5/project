@@ -2,4 +2,4 @@ language: python
 python:
     - "3.6"
 script:
-    - python3 test_rec.py "python ../recommender2.py 1 "postgres://ifurclhpantapl:fac89352221ac2805dd96a1fea59469f559e65857741772d26d1913b31f16838@ec2-23-21-147-71.compute-1.amazonaws.com:5432/d5ghirl7tfe35h"
+    - python3 test_rec.py
