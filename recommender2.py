@@ -6,8 +6,7 @@ import sys
 import os
 
 #This allows for the express server to pass the script a userId
-#ternary is to hopefully avoid compromising the test scripts
-userId = int(sys.argv[1]) if len(sys.argv) == 2 else 1;
+userId = int(sys.argv[1]) if(len(sys.argv)!=1) else 1
 
 
 #def cosSim(x row of scores, y row of scores) of equal length
@@ -47,13 +46,13 @@ def maxSimilarity(userId, a):
     most_simIDs=[]
     #first need to find the index of the userID and create a user matrix with appromaximated mean values
 
-    userMatrix=b[userId-1][1:]
+    userMatrix=b[userId-1]
     i=0
     #id_list=[[id1,sim_score1],[id2,sim_score2],...]
     id_list=[[0,0],[0,0],[0,0],[0,0],[0,0]]
     while i < len(b):
         if i!=userId-1:
-            sim=cosSim(userMatrix,b[i][1:])
+            sim=cosSim(userMatrix,b[i])
             id_list=reorganize_list([i+1,sim], id_list)
         i+=1
     return id_list
@@ -65,7 +64,7 @@ def find_sim_items(userId,maxsim_list):
     b=b.transpose()
 
 
-    i=1
+    i=0
     #bestItems=[movieName or column #, mean score]
     bestItems=[[0,0],[0,0],[0,0]]
     #going through the users rated items
@@ -77,8 +76,8 @@ def find_sim_items(userId,maxsim_list):
             for j in range(0,len(maxsim_list)):
                 #based on weight given by similarity score
                 user=maxsim_list[j][0]
-                sum1+=b[user-1][j]*maxsim_list[j][1]
-                if b[user-1][j]!=0:
+                sum1+=b[user-1][i]*maxsim_list[j][1]
+                if b[user-1][i]!=0:
                     count+=maxsim_list[j][1]
             if(count==0):
                 i += 1
