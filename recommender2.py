@@ -66,7 +66,7 @@ def find_sim_items(userId,maxsim_list):
 
     i=0
     #bestItems=[movieName or column #, mean score]
-    bestItems=[[0,0],[0,0],[0,0]]
+    bestItems=[[-1,-1] for i in range(10)]
     #going through the users rated items
     while i< len(b[userId-1]):
         if b[userId-1][i]==0:
@@ -98,8 +98,15 @@ if __name__ == "__main__":
     df=df.drop(columns=['id'])
     a=df.values.T.tolist()
     similarItems=find_sim_items(userId,maxSimilarity(userId,a))
-    val=similarItems[2][0]
     b=list(df)
-    print(b[val])
+    if(similarItems[-1][0]==-1):
+        print('recommendation failed')
+    else:
+        print('{',end='')
+        for i in range(len(similarItems)-1,-1,-1):
+            end = ','
+            if(i==0 or similarItems[i-1][0]==-1): end = '}\n'
+            print('"{}":{}'.format(b[similarItems[i][0]],similarItems[i][1]),end=end)
+            if(end=='}\n'): break
     sys.stdout.flush()
     conn.close()

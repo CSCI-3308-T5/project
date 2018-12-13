@@ -10,9 +10,14 @@ function getRecommendations(){
 		//data: "",
 		success: function(data){
 			if(data != 'recommendation failed') {
-				window.location.href=`/games/${data}`;
+				let obj = JSON.parse(data);
+				let i = 0;
+				for(key in obj){
+					document.getElementById("recTableRow"+i).innerHTML=`<td><a href=/games/${encodeURIComponent(key)}>${key}</a></td><td>${obj[key]}</td>`
+					i++;
+				}
 			} else {
-				showAlert(data);
+				showAlert("Recommendation algorithm failed, you may need to rate more games.");
 			}
 		}
 	});
