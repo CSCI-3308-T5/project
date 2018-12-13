@@ -47,7 +47,7 @@ function onStarClick(event){
 			return;
 		}
 	}
-	console.log(event.target.parentNode.oldRating,rating)
+	//console.log(event.target.parentNode.oldRating,rating)
 	if(!newGame&&event.target.parentNode.oldRating==rating){
 		event.target.parentNode.oldRating = 0;
 		rating = 0;
@@ -69,7 +69,10 @@ function onStarClick(event){
 					showAlert("An error occurred. Please try again later.");
 				}
 			}else if(newGame){
-				ratings.innerHTML=newStarRatingAndLink(name,rating)+ratings.innerHTML;
+				let newElement = document.createElement("div");
+				newElement.innerHTML = newStarRatingAndLink(name,rating);
+				ratings.insertBefore(newElement,ratings.childNodes[0]);
+				//ratings.innerHTML=newStarRatingAndLink(name,rating)+ratings.innerHTML;
 				document.getElementById("Game#"+name).oldRating = rating;
 				console.log(document.getElementById("Game#"+name));
 			}
